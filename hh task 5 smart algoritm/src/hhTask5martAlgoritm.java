@@ -9,9 +9,10 @@ import java.util.TreeMap;
 public class hhTask5martAlgoritm
 {
   
+	static TreeMap<Integer,Integer> first100NumbersFactorized;
 	
-	static boolean FactorialAlreadyCouldBeDividedWithotRemainder(  Map<Integer,Integer>  mapForFactorizedNumber 
-																	, Map<Integer,Integer>  mapForN)
+	static boolean FactorialAlreadyCouldBeDividedWithotRemainder(  TreeMap<Integer,Integer>  mapForFactorizedNumber 
+																	, TreeMap<Integer,Integer>  mapForN)
 	{
 		for( Map.Entry<Integer,Integer> entry: mapForN.entrySet()  )
 		 {
@@ -34,13 +35,17 @@ public class hhTask5martAlgoritm
   // (m! mod n) == 0
  static boolean IsModuloDivisorOfFactorial( int n, int m )
   {
-	 Map<Integer,Integer>  mapForN  = new  TreeMap <Integer,Integer> ();
+	 TreeMap<Integer,Integer>  mapForN  = new  TreeMap <Integer,Integer> ();
 	 mapForN = getPrimeMultipliers(n);
  
-	 Map<Integer,Integer>  mapForFactorizedNumber  = new  TreeMap <Integer,Integer> ();
+	 TreeMap<Integer,Integer>  mapForFactorizedNumber  = new  TreeMap <Integer,Integer> ();
+	 if (m > 200)
+	 {
+		 mapForFactorizedNumber = new TreeMap <Integer,Integer> (first100NumbersFactorized);
+	 }
 	 for (int i=m; i>=2; i--)
 	 {
-		 Map<Integer,Integer> mapForI = getPrimeMultipliers(i);
+		 TreeMap<Integer,Integer> mapForI = getPrimeMultipliers(i);
 		 //merging maps
 		 for(Map.Entry<Integer,Integer> entry: mapForI.entrySet())
 		 {
@@ -72,7 +77,7 @@ public class hhTask5martAlgoritm
   }
   
  
- static Map.Entry<Integer,Integer>  getBiggestKey( Map<Integer,Integer> mapToGetBiggestElementFrom)
+ static Map.Entry<Integer,Integer>  getBiggestKey( TreeMap<Integer,Integer> mapToGetBiggestElementFrom)
  {
 	 Map.Entry<Integer,Integer> biggestElement = null;
 	 for(Map.Entry<Integer,Integer> entry: mapToGetBiggestElementFrom.entrySet())
@@ -93,14 +98,14 @@ public class hhTask5martAlgoritm
   //get m for given n
  static  int getFactorialBaseForModuloDivisor( int n)
   {
-    Map<Integer,Integer> constituteMultiplier = getPrimeMultipliers(n);
+	 TreeMap<Integer,Integer> constituteMultiplier = getPrimeMultipliers(n);
     System.out.print("constitueMulitplier: " +constituteMultiplier);
     int biggestPrimeNumberInModuloDivisor = getBiggestKey(constituteMultiplier).getKey();
     System.out.print("biggest prime = "+biggestPrimeNumberInModuloDivisor);
     
     for (int i = biggestPrimeNumberInModuloDivisor; i<= n; i++)
     {
-    	System.out.print("c"+i);
+    	System.out.print("\n\tc"+i);
     	if(IsModuloDivisorOfFactorial(n, i))
     	{
     		return i;
@@ -112,9 +117,9 @@ public class hhTask5martAlgoritm
   
   
   //all numbers in result are prime
-static  Map<Integer,Integer> getPrimeMultipliers(int n)
+static  TreeMap<Integer,Integer> getPrimeMultipliers(int n)
   {
-      Map<Integer,Integer>  result  = new  TreeMap <Integer,Integer> ();
+	TreeMap<Integer,Integer>  result  = new  TreeMap <Integer,Integer> ();
   
       int nForCutting = n;
       
@@ -125,7 +130,6 @@ static  Map<Integer,Integer> getPrimeMultipliers(int n)
         if ( (nForCutting % i) == 0 )
         {
           nForCutting = nForCutting / i;
-        //  System.out.print(i + "  ");
           if(result.containsKey(i))
           {
         	result.put( i, result.get( i ) + 1 ) ;
@@ -149,6 +153,36 @@ static  Map<Integer,Integer> getPrimeMultipliers(int n)
   // arguments are passed using the text field below this editor
   public static void main(String[] args)
   {
+	  
+	  
+	 //initing 
+	  TreeMap<Integer,Integer>  mapForFactorizedNumber  = new  TreeMap <Integer,Integer> ();
+	  for (int i=2; i<100; i++)
+		 {
+			 TreeMap<Integer,Integer> mapForI = getPrimeMultipliers(i);
+			 //merging maps
+			 for(Map.Entry<Integer,Integer> entry: mapForI.entrySet())
+			 {
+				 if(mapForFactorizedNumber.containsKey(entry.getKey() ) )
+				 {
+					 int key = entry.getKey();
+					 int value = entry.getValue();
+					 int valueInFactorizedNumber = mapForFactorizedNumber.get(key);
+					 mapForFactorizedNumber.put(key, value + valueInFactorizedNumber);
+				 }
+				 else
+				 {
+					 int key = entry.getKey();
+					 int value = entry.getValue();
+					 mapForFactorizedNumber.put(key, value );
+				 }
+			 }
+		 }
+	  first100NumbersFactorized = mapForFactorizedNumber;
+	  
+	  //end initing
+	  
+	  
    
     
     int start = Integer.parseInt(args[0]);
@@ -158,7 +192,7 @@ static  Map<Integer,Integer> getPrimeMultipliers(int n)
     {
     	System.out.print(i+": ");
     	int factorialBase = getFactorialBaseForModuloDivisor(i);
-    	System.out.println("\t \t The answer is: " + factorialBase );
+    	System.out.println("\n \t \t The answer for " + i + "  is: " + factorialBase );
     	summOfN+=factorialBase;
     }
     System.out.println("\t \t The summary answer is: " + summOfN );
