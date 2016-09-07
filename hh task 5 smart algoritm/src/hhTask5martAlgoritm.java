@@ -9,13 +9,36 @@ import java.util.TreeMap;
 public class hhTask5martAlgoritm
 {
   
+	
+	static boolean FactorialAlreadyCouldBeDividedWithotRemainder(  Map<Integer,Integer>  mapForFactorizedNumber 
+																	, Map<Integer,Integer>  mapForN)
+	{
+		for( Map.Entry<Integer,Integer> entry: mapForN.entrySet()  )
+		 {
+			 int key = entry.getKey();
+			 int value = entry.getValue();
+			 if(mapForFactorizedNumber.containsKey(key) == false) // there is no at least one prime multiplier of n in factorial number 
+			 {
+				 return false;
+			 }
+			 if( mapForFactorizedNumber.get(key) < value ) // there is no enough current prime numbers in factorial
+			 {
+				 return false;
+			 }
+		 }
+		
+		 return true;
+	
+	}
   
   // (m! mod n) == 0
  static boolean IsModuloDivisorOfFactorial( int n, int m )
   {
+	 Map<Integer,Integer>  mapForN  = new  TreeMap <Integer,Integer> ();
+	 mapForN = getPrimeMultipliers(n);
  
 	 Map<Integer,Integer>  mapForFactorizedNumber  = new  TreeMap <Integer,Integer> ();
-	 for (int i=2; i<=m; i++)
+	 for (int i=m; i>=2; i--)
 	 {
 		 Map<Integer,Integer> mapForI = getPrimeMultipliers(i);
 		 //merging maps
@@ -35,29 +58,17 @@ public class hhTask5martAlgoritm
 				 mapForFactorizedNumber.put(key, value );
 			 }
 		 }
-	//	 System.out.println("factorialized  = "+mapForFactorizedNumber);		 
+		 //after multiplyint by every new number, check, if it's enought
+		if( FactorialAlreadyCouldBeDividedWithotRemainder(mapForFactorizedNumber, mapForN) )
+		{
+			return true;
+		}
+		
+		System.out.print(" f" +i); 
 	 }// here we have all multipliers of factorial
 	 
-	 //now check if there is more each of multiplliers in factorized number than in n
-	 Map<Integer,Integer>  mapForN  = new  TreeMap <Integer,Integer> ();
-	 mapForN = getPrimeMultipliers(n);
-	 
-	 for( Map.Entry<Integer,Integer> entry: mapForN.entrySet()  )
-	 {
-		 int key = entry.getKey();
-		 int value = entry.getValue();
-		 if(mapForFactorizedNumber.containsKey(key) == false) // there is no at least one prime multiplier of n in factorial number 
-		 {
-			 return false;
-		 }
-		 if( mapForFactorizedNumber.get(key) < value ) // there is no enough current prime numbers in factorial
-		 {
-			 return false;
-		 }
-	 }
-	
-	 return true;
- 
+//if we get here, it means we tried full factorial, but it couldn't be divided by n without remainder
+	 return false;
   }
   
  
@@ -89,7 +100,7 @@ public class hhTask5martAlgoritm
     
     for (int i = biggestPrimeNumberInModuloDivisor; i<= n; i++)
     {
-    	System.out.println("c"+i);
+    	System.out.print("c"+i);
     	if(IsModuloDivisorOfFactorial(n, i))
     	{
     		return i;
