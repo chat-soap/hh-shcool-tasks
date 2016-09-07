@@ -76,7 +76,7 @@ public class hhTask5martAlgoritm
   }
   
  
- static Map.Entry<Integer,Integer>  getBiggestKey( TreeMap<Integer,Integer> mapToGetBiggestElementFrom)
+ static Map.Entry<Integer,Integer>  getEntryWithBiggestKey( TreeMap<Integer,Integer> mapToGetBiggestElementFrom)
  {
 	 Map.Entry<Integer,Integer> biggestElement = null;
 	 for(Map.Entry<Integer,Integer> entry: mapToGetBiggestElementFrom.entrySet())
@@ -99,10 +99,23 @@ public class hhTask5martAlgoritm
   {
 	 TreeMap<Integer,Integer> constituteMultiplier = getPrimeMultipliers(n);
     System.out.print("constitueMulitplier: " +constituteMultiplier);
-    int biggestPrimeNumberInModuloDivisor = getBiggestKey(constituteMultiplier).getKey();
-    System.out.print("biggest prime = "+biggestPrimeNumberInModuloDivisor);
     
-    for (int i = biggestPrimeNumberInModuloDivisor; i<= n; i++)
+    Map.Entry<Integer,Integer> entry = getEntryWithBiggestKey(constituteMultiplier);
+    int key = entry.getKey();
+	int value = entry.getValue();
+    
+    int biggestPrimeNumberInModuloDivisor = key;
+    int biggestPrimeNumberInModuloDivisorMultipliedByOccurTimes = biggestPrimeNumberInModuloDivisor ;
+    // multiply only if occurrences less than value of key; or you'll have bugs with 81 and 9!    (you get 12(wrong) instead of 9(correct)
+    if (value < key){
+    	biggestPrimeNumberInModuloDivisorMultipliedByOccurTimes*= value;
+    	 System.out.print("multiplied by" + value);
+    }
+    
+    System.out.print("biggest prime = "+key);
+    System.out.print(" biggest prime*n = "+biggestPrimeNumberInModuloDivisorMultipliedByOccurTimes);
+    
+    for (int i = biggestPrimeNumberInModuloDivisorMultipliedByOccurTimes; i<= n; i++)
     {
     	//System.out.print("\n\tc"+i);
     	if(IsModuloDivisorOfFactorial(n, i))
