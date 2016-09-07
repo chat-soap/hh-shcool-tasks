@@ -2,7 +2,6 @@
 // NOTE: please read the 'More Info' tab to the right for shortcuts.
 //*******************************************************************
 import java.util.*;
-import java.util.TreeMap;
 
 
 // one class needs to have a main() method
@@ -39,10 +38,10 @@ public class hhTask5martAlgoritm
 	 mapForN = getPrimeMultipliers(n);
  
 	 TreeMap<Integer,Integer>  mapForFactorizedNumber  = new  TreeMap <Integer,Integer> ();
-	 if (m > 200)
-	 {
-		 mapForFactorizedNumber = new TreeMap <Integer,Integer> (first100NumbersFactorized);
-	 }
+//	 if (m > 200)
+//	 {
+//		 mapForFactorizedNumber = new TreeMap <Integer,Integer> (first100NumbersFactorized);
+//	 }
 	 for (int i=m; i>=2; i--)
 	 {
 		 TreeMap<Integer,Integer> mapForI = getPrimeMultipliers(i);
@@ -69,7 +68,7 @@ public class hhTask5martAlgoritm
 			return true;
 		}
 		
-		System.out.print(" f" +i); 
+		//System.out.print(" f" +i); 
 	 }// here we have all multipliers of factorial
 	 
 //if we get here, it means we tried full factorial, but it couldn't be divided by n without remainder
@@ -105,7 +104,7 @@ public class hhTask5martAlgoritm
     
     for (int i = biggestPrimeNumberInModuloDivisor; i<= n; i++)
     {
-    	System.out.print("\n\tc"+i);
+    	//System.out.print("\n\tc"+i);
     	if(IsModuloDivisorOfFactorial(n, i))
     	{
     		return i;
@@ -123,9 +122,10 @@ static  TreeMap<Integer,Integer> getPrimeMultipliers(int n)
   
       int nForCutting = n;
       
+      outerWhile:
       while (nForCutting > 1)
     {
-      for (int i=2; i<=nForCutting; i++)
+      for (int i=2; i<=Math.ceil( Math.sqrt(nForCutting) ); i++)
       {
         if ( (nForCutting % i) == 0 )
         {
@@ -138,10 +138,20 @@ static  TreeMap<Integer,Integer> getPrimeMultipliers(int n)
           {
         	  result.put(i, 1);
           }
-          break;
+          continue outerWhile;
         }
       }
-       
+      //if we reached here - nForCutting is prime
+      
+      if(result.containsKey(nForCutting))
+      {
+    	result.put( nForCutting, result.get( nForCutting ) + 1 ) ;
+      }
+      else
+      {
+    	  result.put(nForCutting, 1);
+      }
+      nForCutting = nForCutting / nForCutting;
     }
           
     
