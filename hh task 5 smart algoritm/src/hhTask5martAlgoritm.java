@@ -2,15 +2,16 @@
 // NOTE: please read the 'More Info' tab to the right for shortcuts.
 //*******************************************************************
 import java.util.*;
-
+import java.math.BigInteger;
 
 // one class needs to have a main() method
 public class hhTask5martAlgoritm
 {
   
 	static TreeMap<Integer,Integer> first100NumbersFactorized;
+	static TreeMap<Integer, TreeMap<Integer,Integer>> factorialsCache;
 	
-	static boolean FactorialAlreadyCouldBeDividedWithotRemainder(  TreeMap<Integer,Integer>  mapForFactorizedNumber 
+	static boolean FactorialAlreadyCouldBeDividedWithoutRemainder(  TreeMap<Integer,Integer>  mapForFactorizedNumber 
 																	, TreeMap<Integer,Integer>  mapForN)
 	{
 		for( Map.Entry<Integer,Integer> entry: mapForN.entrySet()  )
@@ -37,12 +38,14 @@ public class hhTask5martAlgoritm
 	 TreeMap<Integer,Integer>  mapForN  = new  TreeMap <Integer,Integer> ();
 	 mapForN = getPrimeMultipliers(n);
  
+	 int lowestNumber = 2;
 	 TreeMap<Integer,Integer>  mapForFactorizedNumber  = new  TreeMap <Integer,Integer> ();
-//	 if (m > 200)
-//	 {
-//		 mapForFactorizedNumber = new TreeMap <Integer,Integer> (first100NumbersFactorized);
-//	 }
-	 for (int i=m; i>=2; i--)
+	 if (m > 200)
+	 {
+		 mapForFactorizedNumber = new TreeMap <Integer,Integer> (first100NumbersFactorized);
+		 lowestNumber = 101;
+	 }
+	 for (int i=m; i>= lowestNumber ; i--)
 	 {
 		 TreeMap<Integer,Integer> mapForI = getPrimeMultipliers(i);
 		 //merging maps
@@ -62,13 +65,13 @@ public class hhTask5martAlgoritm
 				 mapForFactorizedNumber.put(key, value );
 			 }
 		 }
-		 //after multiplyint by every new number, check, if it's enought
-		if( FactorialAlreadyCouldBeDividedWithotRemainder(mapForFactorizedNumber, mapForN) )
+		 //after multiplying by every new number, check, if it's enought
+		if( FactorialAlreadyCouldBeDividedWithoutRemainder(mapForFactorizedNumber, mapForN) )
 		{
 			return true;
 		}
 		
-		//System.out.print(" f" +i); 
+		System.out.print(" f" +i); 
 	 }// here we have all multipliers of factorial
 	 
 //if we get here, it means we tried full factorial, but it couldn't be divided by n without remainder
@@ -111,13 +114,17 @@ public class hhTask5martAlgoritm
     	biggestPrimeNumberInModuloDivisorMultipliedByOccurTimes*= value;
     	 System.out.print("multiplied by" + value);
     }
+    else
+    {
+    	System.out.println("scip Multiplication" + value);
+    }
     
     System.out.print("biggest prime = "+key);
     System.out.print(" biggest prime*n = "+biggestPrimeNumberInModuloDivisorMultipliedByOccurTimes);
     
     for (int i = biggestPrimeNumberInModuloDivisorMultipliedByOccurTimes; i<= n; i++)
     {
-    	//System.out.print("\n\tc"+i);
+    	System.out.print("\n\tc"+i);
     	if(IsModuloDivisorOfFactorial(n, i))
     	{
     		return i;
@@ -180,7 +187,7 @@ static  TreeMap<Integer,Integer> getPrimeMultipliers(int n)
 	  
 	 //initing 
 	  TreeMap<Integer,Integer>  mapForFactorizedNumber  = new  TreeMap <Integer,Integer> ();
-	  for (int i=2; i<100; i++)
+	  for (int i=2; i<=100; i++)
 		 {
 			 TreeMap<Integer,Integer> mapForI = getPrimeMultipliers(i);
 			 //merging maps
@@ -210,13 +217,13 @@ static  TreeMap<Integer,Integer> getPrimeMultipliers(int n)
     
     int start = Integer.parseInt(args[0]);
     int end = Integer.parseInt(args[1]);
-    int summOfN = 0;
+    BigInteger summOfN = BigInteger.valueOf(0);
     for (int i=start; i <= end; i++)
     {
     	System.out.print(i+": ");
     	int factorialBase = getFactorialBaseForModuloDivisor(i);
     	System.out.println("\n \t \t The answer for " + i + "  is: " + factorialBase );
-    	summOfN+=factorialBase;
+    	summOfN = summOfN.add(BigInteger.valueOf(factorialBase));
     }
     System.out.println("\t \t The summary answer is: " + summOfN );
     
