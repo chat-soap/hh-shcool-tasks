@@ -8,130 +8,51 @@ import java.math.BigInteger;
 public class hhTask5martAlgoritm
 {
   
-	static TreeMap<Integer,Integer> first100NumbersFactorized;
-	static TreeMap<Integer, TreeMap<Integer,Integer>> factorialsCache;
-	
-	static boolean FactorialAlreadyCouldBeDividedWithoutRemainder(  TreeMap<Integer,Integer>  mapForFactorizedNumber 
-																	, TreeMap<Integer,Integer>  mapForN)
-	{
-		for( Map.Entry<Integer,Integer> entry: mapForN.entrySet()  )
-		 {
-			 int key = entry.getKey();
-			 int value = entry.getValue();
-			 if(mapForFactorizedNumber.containsKey(key) == false) // there is no at least one prime multiplier of n in factorial number 
-			 {
-				 return false;
-			 }
-			 if( mapForFactorizedNumber.get(key) < value ) // there is no enough current prime numbers in factorial
-			 {
-				 return false;
-			 }
-		 }
-		
-		 return true;
-	
-	}
-  
-  // (m! mod n) == 0
- static boolean IsModuloDivisorOfFactorial( int n, int m )
-  {
-	 TreeMap<Integer,Integer>  mapForN  = new  TreeMap <Integer,Integer> ();
-	 mapForN = getPrimeMultipliers(n);
- 
-	 int lowestNumber = 2;
-	 TreeMap<Integer,Integer>  mapForFactorizedNumber  = new  TreeMap <Integer,Integer> ();
-	 if (m > 200)
-	 {
-		 mapForFactorizedNumber = new TreeMap <Integer,Integer> (first100NumbersFactorized);
-		 lowestNumber = 101;
-	 }
-	 for (int i=m; i>= lowestNumber ; i--)
-	 {
-		 TreeMap<Integer,Integer> mapForI = getPrimeMultipliers(i);
-		 //merging maps
-		 for(Map.Entry<Integer,Integer> entry: mapForI.entrySet())
-		 {
-			 if(mapForFactorizedNumber.containsKey(entry.getKey() ) )
-			 {
-				 int key = entry.getKey();
-				 int value = entry.getValue();
-				 int valueInFactorizedNumber = mapForFactorizedNumber.get(key);
-				 mapForFactorizedNumber.put(key, value + valueInFactorizedNumber);
-			 }
-			 else
-			 {
-				 int key = entry.getKey();
-				 int value = entry.getValue();
-				 mapForFactorizedNumber.put(key, value );
-			 }
-		 }
-		 //after multiplying by every new number, check, if it's enought
-		if( FactorialAlreadyCouldBeDividedWithoutRemainder(mapForFactorizedNumber, mapForN) )
-		{
-			return true;
-		}
-		
-		System.out.print(" f" +i); 
-	 }// here we have all multipliers of factorial
-	 
-//if we get here, it means we tried full factorial, but it couldn't be divided by n without remainder
-	 return false;
-  }
-  
- 
- static Map.Entry<Integer,Integer>  getEntryWithBiggestKey( TreeMap<Integer,Integer> mapToGetBiggestElementFrom)
- {
-	 Map.Entry<Integer,Integer> biggestElement = null;
-	 for(Map.Entry<Integer,Integer> entry: mapToGetBiggestElementFrom.entrySet())
-	 {
-		 if(biggestElement == null)
-		 {
-			 biggestElement = entry;
-		 }
-		 else if (biggestElement.getKey() < entry.getKey())
-		 {
-			 biggestElement = entry;
-		 }
-
-	 }
-	 return biggestElement;
- }
- 
   //get m for given n
  static  int getFactorialBaseForModuloDivisor( int n)
   {
 	 TreeMap<Integer,Integer> constituteMultiplier = getPrimeMultipliers(n);
     System.out.print("constitueMulitplier: " +constituteMultiplier);
     
-    Map.Entry<Integer,Integer> entry = getEntryWithBiggestKey(constituteMultiplier);
-    int key = entry.getKey();
-	int value = entry.getValue();
+    //be aware of powers ( 9! incluldes 3 six times (9, 6, 3*3) , not 3 as you can suggest
+    int biggestPrimeNumberInModuloDivisorMultipliedByOccurTimes = 0;
     
-    int biggestPrimeNumberInModuloDivisor = key;
-    int biggestPrimeNumberInModuloDivisorMultipliedByOccurTimes = biggestPrimeNumberInModuloDivisor ;
-    // multiply only if occurrences less than value of key; or you'll have bugs with 81 and 9!    (you get 12(wrong) instead of 9(correct)
-    if (value < key){
-    	biggestPrimeNumberInModuloDivisorMultipliedByOccurTimes*= value;
-    	 System.out.print("multiplied by" + value);
-    }
-    else
+    for(Map.Entry<Integer,Integer> entry: constituteMultiplier.entrySet())
     {
-    	System.out.println("scip Multiplication" + value);
+    	int key = entry.getKey();
+		int amountKeyShouldBeInFactorial = entry.getValue();
+		int keyTimesCounterValue = 0;
+		int keyInFactorialAmountCounter = 0;
+		//outer loop for powers
+			for (int powerCounter = 1; keyInFactorialAmountCounter < amountKeyShouldBeInFactorial; powerCounter ++ )
+			{
+				//for every power (power 1 too) add only "key" to value, but "power" to counter
+				// check for 81 and 3; value				3	6	9	12	15	18		21	24	3*3*3
+				//											3	3*2	3*3	3*4	3*5	3*3*2	3*7	3*8	3*3*3
+				//						timesInFactorial 	1	2	4	5	6	7		8	9	12
+				keyInFactorialAmountCounter += powerCounter;
+				keyTimesCounterValue += key ;
+				
+				//inner usual addition
+				//if we multiplied key times - we reached power
+				for (int timesKeyWasAdded = 0; timesKeyWasAdded 		< 	key  &&
+													keyInFactorialAmountCounter	<	amountKeyShouldBeInFactorial; timesKeyWasAdded ++) 
+				{
+					keyInFactorialAmountCounter += 1;
+					keyTimesCounterValue += key;
+				}
+			}
+		System.out.print("\n\tfor key "+key+"thoHave "+amountKeyShouldBeInFactorial
+							+"times used "+keyTimesCounterValue+"which gives "+keyInFactorialAmountCounter);
+		
+		if (biggestPrimeNumberInModuloDivisorMultipliedByOccurTimes < keyTimesCounterValue)
+		{
+			biggestPrimeNumberInModuloDivisorMultipliedByOccurTimes = keyTimesCounterValue;
+		}
     }
     
-    System.out.print("biggest prime = "+key);
-    System.out.print(" biggest prime*n = "+biggestPrimeNumberInModuloDivisorMultipliedByOccurTimes);
-    
-    for (int i = biggestPrimeNumberInModuloDivisorMultipliedByOccurTimes; i<= n; i++)
-    {
-    	System.out.print("\n\tc"+i);
-    	if(IsModuloDivisorOfFactorial(n, i))
-    	{
-    		return i;
-    	}
-    }
-    
-       return n;    
+    return biggestPrimeNumberInModuloDivisorMultipliedByOccurTimes;
+ 
   }
   
   
@@ -184,38 +105,7 @@ static  TreeMap<Integer,Integer> getPrimeMultipliers(int n)
   public static void main(String[] args)
   {
 	  
-	  
-	 //initing 
-	  TreeMap<Integer,Integer>  mapForFactorizedNumber  = new  TreeMap <Integer,Integer> ();
-	  for (int i=2; i<=100; i++)
-		 {
-			 TreeMap<Integer,Integer> mapForI = getPrimeMultipliers(i);
-			 //merging maps
-			 for(Map.Entry<Integer,Integer> entry: mapForI.entrySet())
-			 {
-				 if(mapForFactorizedNumber.containsKey(entry.getKey() ) )
-				 {
-					 int key = entry.getKey();
-					 int value = entry.getValue();
-					 int valueInFactorizedNumber = mapForFactorizedNumber.get(key);
-					 mapForFactorizedNumber.put(key, value + valueInFactorizedNumber);
-				 }
-				 else
-				 {
-					 int key = entry.getKey();
-					 int value = entry.getValue();
-					 mapForFactorizedNumber.put(key, value );
-				 }
-			 }
-		 }
-	  first100NumbersFactorized = mapForFactorizedNumber;
-	  
-	  //end initing
-	  
-	  
-   
-    
-    int start = Integer.parseInt(args[0]);
+	int start = Integer.parseInt(args[0]);
     int end = Integer.parseInt(args[1]);
     BigInteger summOfN = BigInteger.valueOf(0);
     for (int i=start; i <= end; i++)
