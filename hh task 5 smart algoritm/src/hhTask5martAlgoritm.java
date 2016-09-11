@@ -23,24 +23,18 @@ public class hhTask5martAlgoritm
 		int amountKeyShouldBeInFactorial = entry.getValue();
 		int keyTimesCounterValue = 0;
 		int keyInFactorialAmountCounter = 0;
+		int multiplierCounter = 1;
 		//outer loop for powers
-			for (int powerCounter = 1; keyInFactorialAmountCounter < amountKeyShouldBeInFactorial; powerCounter ++ )
+			for (multiplierCounter = 1; keyInFactorialAmountCounter < amountKeyShouldBeInFactorial; multiplierCounter ++ )
 			{
-				//for every power (power 1 too) add only "key" to value, but "power" to counter
-				// check for 81 and 3; value				3	6	9	12	15	18		21	24	3*3*3
-				//											3	3*2	3*3	3*4	3*5	3*3*2	3*7	3*8	3*3*3
-				//						timesInFactorial 	1	2	4	5	6	7		8	9	12
-				keyInFactorialAmountCounter += powerCounter;
-				keyTimesCounterValue += key ;
+				keyTimesCounterValue = key * multiplierCounter;
 				
-				//inner usual addition
-				//if we multiplied key times - we reached power
-				for (int timesKeyWasAdded = 0; timesKeyWasAdded 		< 	key  &&
-													keyInFactorialAmountCounter	<	amountKeyShouldBeInFactorial; timesKeyWasAdded ++) 
+				Map<Integer, Integer> keyTimesMultiplierCounterPrimeNumbers = getPrimeMultipliers(keyTimesCounterValue);
+				if ( keyTimesMultiplierCounterPrimeNumbers.containsKey(key) )
 				{
-					keyInFactorialAmountCounter += 1;
-					keyTimesCounterValue += key;
+					keyInFactorialAmountCounter += keyTimesMultiplierCounterPrimeNumbers.get(key);
 				}
+				
 			}
 		System.out.print("\n\tfor key "+key+"thoHave "+amountKeyShouldBeInFactorial
 							+"times used "+keyTimesCounterValue+"which gives "+keyInFactorialAmountCounter);
