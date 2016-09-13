@@ -1,3 +1,5 @@
+import java.io.Console;
+
 
 public class hhTask2 {
 
@@ -10,7 +12,7 @@ public class hhTask2 {
 		// TODO Auto-generated method stub
 			
 		CalculateDiagonalValue h = new CalculateDiagonalValue();
-		h.Calculate(5);
+		h.Calculate(Integer.parseInt((args[0]))); 
 	}
 
 }
@@ -73,7 +75,19 @@ class CalculateDiagonalValue
 			}
 			System.out.print("\n");
 		}
-			
+		
+		int diagSumm=0;
+		for(int diag =1; diag<=sideSize; diag++){
+			diagSumm+=square[diag][diag];
+			System.out.print(square[diag][diag]+" ");
+					
+		}
+		for(int diag =1; diag<=sideSize; diag++){
+			diagSumm+=square[sideSize-diag+1][diag];
+			System.out.print(square[sideSize-diag+1][diag]+" ");
+					
+		}
+		System.out.print("\nTotal answer "+(diagSumm-1) + '\n');	
 				
 		
 		
