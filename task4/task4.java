@@ -5,6 +5,8 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.sound.sampled.ReverbType;
+
 
 public class task4 {
 
@@ -103,13 +105,39 @@ class CalculatingClass
 		System.out.print(getDigits(1)+"\n");
 		System.out.print(getDigits(100)+"\n\n");
 
-		for (int i=1; i< 100000; i++)
+		Vector<Integer> hardlyConvertibe = new Vector<Integer>();
+		
+		int timesRepeated =0;
+		outerFor:
+		for (int i=1; i< 12407; i++)
 		{
-			
-			System.out.print(i + " "+getDigits(i)+ " "+ convertToNumber(getDigits(i))
-								+(i == convertToNumber(getDigits(i)) )+ "\n");
+			System.out.print("\n start new number:" +i+": ");
+			timesRepeated=0;
+			Vector<Integer> processingNumber = getDigits(i);
+			do
+			{	
+				timesRepeated++;
+				System.out.print(timesRepeated+": "+processingNumber);
+				Vector<Integer> mirroredNumber = rotate(processingNumber);
+				System.out.print(" "+mirroredNumber);
+				int newNumber = convertToNumber(processingNumber) + convertToNumber(mirroredNumber);
+				System.out.print(" "+newNumber);
+				processingNumber = getDigits(newNumber);
+				System.out.print(" "+processingNumber);
+				System.out.print(" "+isPalyndrome(processingNumber)+";");
+				if(isPalyndrome(processingNumber))
+				{
+					continue outerFor;
+				}
+			}
+			while
+				(timesRepeated < 50)
+				;
+			// after 50 attempts there were no one palyndrome
+			hardlyConvertibe.add(i);
+				
 		}
-
+		System.out.print("\n"+hardlyConvertibe+"\n size:"+hardlyConvertibe.size());
 		LOGGER.log(Level.INFO,getDigits(1245566780).toString());
 
 		return 0;
