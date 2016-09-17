@@ -31,10 +31,10 @@ class CalculatingClass
 {
 	
 	
-	public Boolean isPalyndrome(Vector<Integer> numberToCheck)
+	public Boolean isPalyndrome(Vector<Long> numberToCheck)
 	{
-		ListIterator<Integer> left = numberToCheck.listIterator();
-		ListIterator<Integer> right = numberToCheck.listIterator(numberToCheck.size());
+		ListIterator<Long> left = numberToCheck.listIterator();
+		ListIterator<Long> right = numberToCheck.listIterator(numberToCheck.size());
 		
 		while (left.nextIndex() < right.previousIndex() )
 		{
@@ -49,10 +49,10 @@ class CalculatingClass
 	}
 
 
-	public Vector<Integer> rotate( Vector<Integer> numberToProcess )
+	public Vector<Long> rotate( Vector<Long> numberToProcess )
 	{
-		Vector<Integer> answer = new Vector<Integer>();
-		ListIterator<Integer> right = numberToProcess.listIterator(numberToProcess.size());
+		Vector<Long> answer = new Vector<Long>();
+		ListIterator<Long> right = numberToProcess.listIterator(numberToProcess.size());
 		{
 			while (right.hasPrevious())
 			{
@@ -64,28 +64,28 @@ class CalculatingClass
 	}
 	
 	
-	Vector<Integer> getDigits(int numberToParse)
+	Vector<Long> getDigits(long numberToParse)
 	{
-		Vector<Integer> answerReversed = new Vector<Integer>();
+		Vector<Long> answerReversed = new Vector<Long>();
 		
 		while (numberToParse > 0)
 		{
-			int remainder = numberToParse % 10;
+			long remainder = numberToParse % 10;
 			numberToParse = numberToParse / 10;
 			
 			answerReversed.add(remainder);
 		}
 		//order was reversed. Reverse it back
 
-		Vector<Integer> answer = rotate(answerReversed);
+		Vector<Long> answer = rotate(answerReversed);
 		return answer ;
 	}
 	
-	int convertToNumber(Vector<Integer> numberToConvert)
+	long convertToNumber(Vector<Long> numberToConvert)
 	{
-		int answer = 0;
-		ListIterator<Integer> right = numberToConvert.listIterator(numberToConvert.size());
-		int currentPositionWeight = 1;
+		long answer = 0;
+		ListIterator<Long> right = numberToConvert.listIterator(numberToConvert.size());
+		long currentPositionWeight = 1;
 		while(right.hasPrevious())
 		{
 			answer += right.previous() * currentPositionWeight;
@@ -96,7 +96,46 @@ class CalculatingClass
 		
 	}
 	
-	int calculate()
+	
+	Vector<Long> add(Vector<Long> leftNumberToAdd, Vector<Long> rightNumberToAdd )
+	{
+		Vector<Long> answerReversed = new Vector<Long>();
+		long carry = 0;
+		ListIterator<Long> left = leftNumberToAdd.listIterator(leftNumberToAdd.size());
+		ListIterator<Long> right = rightNumberToAdd.listIterator(rightNumberToAdd.size());
+		
+		while (left.hasPrevious() || right.hasPrevious() || carry != 0)
+		{
+			long leftNumberInPosition = 0;
+			if(left.hasPrevious())
+			{
+				leftNumberInPosition = left.previous();
+			}
+			
+			long rightNumberInPosition = 0;
+			if( right.hasPrevious())
+			{
+				 rightNumberInPosition =  right.previous();
+			}
+			
+			long summInPosition = leftNumberInPosition + rightNumberInPosition + carry;
+			carry = 0;
+			
+			if (summInPosition > 9)
+			{
+				summInPosition = summInPosition % 10;
+				carry = 1;
+			}
+			answerReversed.add(summInPosition);
+		}
+		
+		
+		return rotate(answerReversed);
+		
+	}
+	
+	
+	long calculate()
 	{
 		final Logger LOGGER = Logger.getLogger(CalculatingClass.class.getName()); 
 		LOGGER.setLevel(Level.FINEST); 
@@ -105,26 +144,24 @@ class CalculatingClass
 		System.out.print(getDigits(1)+"\n");
 		System.out.print(getDigits(100)+"\n\n");
 
-		Vector<Integer> hardlyConvertibe = new Vector<Integer>();
+		Vector<Long> hardlyConvertibe = new Vector<Long>();
 		
-		int timesRepeated =0;
+		long timesRepeated =0;
 		outerFor:
-		for (int i=1; i< 12407; i++)
+		for (long i=1; i< 12407; i++)
 		{
 			System.out.print("\n start new number:" +i+": ");
 			timesRepeated=0;
-			Vector<Integer> processingNumber = getDigits(i);
+			Vector<Long> processingNumber = getDigits(i);
 			do
 			{	
 				timesRepeated++;
-				System.out.print(timesRepeated+": "+processingNumber);
-				Vector<Integer> mirroredNumber = rotate(processingNumber);
+				System.out.print("\t" +timesRepeated+": "+processingNumber);
+				Vector<Long> mirroredNumber = rotate(processingNumber);
 				System.out.print(" "+mirroredNumber);
-				int newNumber = convertToNumber(processingNumber) + convertToNumber(mirroredNumber);
-				System.out.print(" "+newNumber);
-				processingNumber = getDigits(newNumber);
+				processingNumber = add(processingNumber, mirroredNumber);
 				System.out.print(" "+processingNumber);
-				System.out.print(" "+isPalyndrome(processingNumber)+";");
+				System.out.print(" "+isPalyndrome(processingNumber)+";\n");
 				if(isPalyndrome(processingNumber))
 				{
 					continue outerFor;
