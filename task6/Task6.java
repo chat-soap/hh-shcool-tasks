@@ -126,7 +126,7 @@ class CalculatingClass
 		System.out.print(getDigits(100)+"\n\n");
 
 		long splendidNumbersAmount = 0;
-		for (long i=19; i< 12407; i++)
+		for (long i=19; i< 6100000; i++)
 		{
 			Vector<Long> splendidNumberCandidate = new Vector<Long>();
 			System.out.print("\t"+i+":");
