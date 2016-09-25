@@ -61,11 +61,11 @@ class CalculatingClass
 		System.out.print(getDigits(100)+"\n\n");
 		
 		
-		for (int i =1; i< 2000; i++)
-			if(getDigits(2*i).equals(getDigits(3*i)))
+		for (int i =1; i< 4000; i++)
+			if(getDigits(2*i).equals(getDigits(5*i)))
 			{
 				System.out.print(i + "*2="+2*i + " gives "+getDigits(i*2)+"\n");
-				System.out.print(i + "*3="+3*i + " gives "+getDigits(i*3)+"\n\n");
+				System.out.print(i + "*5="+5*i + " gives "+getDigits(i*5)+"\n\n");
 			}
 
 		LOGGER.log(Level.INFO,getDigits(1245566780).toString());
