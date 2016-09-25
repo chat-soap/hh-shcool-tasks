@@ -5,20 +5,24 @@ public class Task4 {
 	  public static void main(String []args){
 	        System.out.println("Hello World");
 	            int trueCounter = 0;
-	    for (int r=0;r<10; r++)
+	    for (int r=1;r<10; r++)
 	    {
-	    	for (int s=0;s<10; s++)
+	    	for (int z=0;z<10; z++)
 	    	{
 	      		for (int u=0;u<10; u++)
 	            {
-	             	for (int v=0;v<10; v++)
+	             	for (int s=0;s<10; s++)
 	                {
-	                 	for (int w=0;w<10; w++)
+	                 	for (int x=0;x<10;x++)
 	                    {
-	                          System.out.print(r+""+r+""+s+""+u+"+"+u+""+u+""+s+"="+r+""+v+""+w+""+w+"   ");
-	                      int a = r*1000+r*100+s*10+u;
-	                      int b = u*100+u*10+s;
-	                      int c = r*1000+v*100+w*10+w;
+	                          System.out.print(r+""+z+""+u+
+	                        		  			"+"
+	                        		  			+r+""+s+""+z+""+x+
+	                        		  			"="
+	                        		  			+r+""+u+""+z+""+r+"   ");
+	                      int a = r*100+z*10+u;
+	                      int b = r*1000+s*100+z*10+x;
+	                      int c = r*1000+u*100+z*10+r;
 	                      if (a+b == c)
 	                      {
 	                        System.out.println("true");
