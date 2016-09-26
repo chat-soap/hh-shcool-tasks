@@ -1,11 +1,5 @@
-import java.util.TreeMap;
+
 import java.util.TreeSet;
-
-import javax.swing.event.TreeSelectionEvent;
-
-import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
-
-
 public class SumOfPrimeNumbers {
 
 	/**
@@ -55,7 +49,7 @@ class calculateAmount
 			System.out.print(" "+i );	
 		}
 		
-		System.out.println(" \n now calculation" );
+		System.out.println("at all:"+primeNumbers.size()+" \n now calculation" );
 		TreeSet<Integer>oldSummOfPrimeNumbers = primeNumbers;
 		TreeSet<Integer>newSummOfPrimeNumbers = new TreeSet<Integer>();
 		int amount = primeNumbers.size(); // for k=1
@@ -95,6 +89,17 @@ class calculateAmount
 			
 			oldSummOfPrimeNumbers = newSummOfPrimeNumbers;
 			newSummOfPrimeNumbers = new TreeSet<Integer>();
+			
+			//unfortunatelly this won't happen more ofen than once in couple of levels
+			if (oldSummOfPrimeNumbers.size() > 0)
+			{
+				if ( oldSummOfPrimeNumbers.first() + primeNumbers.last() > maxNumber)
+				{
+					System.out.println("removed "+ primeNumbers.last());
+					primeNumbers.remove(primeNumbers.last());	
+				}			
+				System.out.println("mininal "+ oldSummOfPrimeNumbers.first());
+			}
 			
 		}
 		
